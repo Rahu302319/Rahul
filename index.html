@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Data Entry Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .form-container {
+            max-width: 100%;
+            width: 400px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #f9f9f9;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 1em;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            font-size: 1em;
+        }
+        .form-group button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            color: #fff;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .login-btn {
+            background-color: #007bff;
+        }
+        .submit-btn {
+            background-color: #28a745;
+        }
+        .clear-btn {
+            background-color: #dc3545;
+            margin-top: 10px;
+        }
+        @media (max-width: 600px) {
+            body {
+                margin: 10px;
+            }
+            .form-container {
+                padding: 15px;
+                box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            }
+            .form-group label, .form-group input, .form-group button {
+                font-size: 0.9em;
+            }
+            .form-group button {
+                padding: 8px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Form -->
+    <div class="form-container" id="login-form">
+        <h2>Login</h2>
+        <div class="form-group">
+            <label for="login-id">Login ID:</label>
+            <input type="text" id="login-id" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" required>
+        </div>
+        <div class="form-group">
+            <button type="button" class="login-btn" onclick="login()">Login</button>
+        </div>
+    </div>
+
+    <!-- Data Entry Form (Hidden Initially) -->
+    <div class="form-container" id="data-entry-form-container" style="display:none;">
+        <form id="data-entry-form">
+            <h2>Data Entry Form</h2>
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="age">Age:</label>
+                <input type="number" id="age" name="age" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Mail ID:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="submit-btn">Submit</button>
+                <button type="button" class="clear-btn" onclick="clearForm()">Clear</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function login() {
+            const loginId = document.getElementById('login-id').value;
+            const password = document.getElementById('password').value;
+
+            if (loginId === 'Rahul' && password === 'admin') {
+                document.getElementById('login-form').style.display = 'none';
+                document.getElementById('data-entry-form-container').style.display = 'block';
+            } else {
+                alert('Invalid Login ID or Password');
+            }
+        }
+
+        document.getElementById('data-entry-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+
+            fetch('https://script.google.com/macros/s/AKfycbxWIGMiMEADaCLjtdl12rz1iSZl13rnbUkHbdO-PQJEiukpLjbbgT7dF6jsqzFtR6Bz/exec', { // Replace with your Google Apps Script web app URL
+                method: 'POST',
+                contentType: 'application/json',
+                body: JSON.stringify(data)
+            })
+            .then(response => response.text())
+            .then(result => {
+                alert('Form submitted successfully!');
+                clearForm();
+            })
+            .catch(error => console.error('Error:', error));
+        });
+
+        function clearForm() {
+            document.getElementById('data-entry-form').reset();
+        }
+    </script>
+</body>
+</html>
